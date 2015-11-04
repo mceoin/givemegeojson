@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="app.js"></script>
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="./app.css" />
+
+  </head>
+  <body>
+    <div class="headline">
+      <h2> Give me GeoJSON!</h2>
+    </div>
+    <div class="imgholder">
+      <img class="planetthumb" src="https://api.planet.com/v0/scenes/ortho/20150830_000654_0b07/square-thumb?size=lg">
+    </div>
+
+    <div class="formarea" onsubmit="newLoc()">
+      <form name="locform">
+        <input class="locinput" type="text" name="locinput" placeholder="Enter Location">
+      </form>
+    </div>
+  </body>
+</html>
+
