@@ -30,6 +30,10 @@ body {
   text-align: center;
 }
 
+input.locinput:focus{
+  outline: none;
+}
+
 .locinput {
   width: 200px;
   height: 25px;
