@@ -17,15 +17,12 @@ updateMapboxRequest = function(){
   mapboxRequest = "https://api.mapbox.com/geocoding/v5/mapbox.places/"+loc+".json?access_token="+mapboxKey
 }
 
-console.log("mapboxRequest: " + mapboxRequest)
-
 getGeoJson = function(){
 
   updateMapboxRequest();
   $.ajax({
     url: mapboxRequest,
     success: function(data) {
-        console.log(data)
         responseObject = data.features[0]
         responseBox = responseObject.bbox
         responseLatLong = responseObject.center
@@ -33,7 +30,6 @@ getGeoJson = function(){
         $('.geojsonbox').html("bbox: "+responseBox)
         $('.geojsoncenter').html("lat/long: " + responseLatLong)
         $('.banner').html(responseName)
-        console.log("responseName: "+responseName)
         planetLabs();
     },
   });
@@ -72,13 +68,11 @@ planetLabs = function(){
           "Authorization": auth
       },
       success: function(data) {
-          console.log(data.features)
           first_object = data.features[0]
           if (first_object){
             acquired = (new Date(first_object.properties.acquired)).toString()
             $('.acquired').html("Photo Taken: " + acquired)
             ortho_id = (first_object.id)
-            console.log("ortho_id: " + ortho_id)
             planetUrl = "https://api.planet.com/v0/scenes/ortho/"+ortho_id+"/square-thumb?size=lg"
             $('.planetthumb').attr("src", planetUrl)
           } else {

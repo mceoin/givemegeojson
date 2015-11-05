@@ -43,6 +43,10 @@ input.locinput:focus{
   border-bottom: 1px solid;
 }
 
+.acquired{
+  margin-top: 5px;
+}
+
 .geojson{
   width: 100%;
   text-align: center;
