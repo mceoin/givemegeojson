@@ -1,10 +1,9 @@
-// /* MAPBOX CODE */
+/* MAPBOX */
 
 loc = "oakland"
 placeholder = "Enter Location"
 
 function newLoc(){
-  console.log("newLoc firing")
   event.preventDefault();
   loc = document.locform.locinput.value
   getGeoJson();
@@ -20,48 +19,37 @@ updateMapboxRequest = function(){
 
 console.log("mapboxRequest: " + mapboxRequest)
 
-var response = null;
-var responseObject = null;
-var responseBox = null;
-var responseName = null;
-
 getGeoJson = function(){
+
   updateMapboxRequest();
   $.ajax({
     url: mapboxRequest,
-    // data: params,
-    // headers: {
-    //     "Authorization": auth
-    // },
     success: function(data) {
-        // do something with data.features here
         console.log(data)
         responseObject = data.features[0]
         responseBox = responseObject.bbox
-        console.log("responseBox: "+responseBox)
+        responseLatLong = responseObject.center
         responseName = responseObject.place_name
+        $('.geojsonbox').html("bbox: "+responseBox)
+        $('.geojsoncenter').html("lat/long: " + responseLatLong)
+        $('.banner').html(responseName)
         console.log("responseName: "+responseName)
         planetLabs();
     },
   });
 }
 
-/* PLANET LABS CODE */
+/* PLANET LABS */
 planetLabs = function(){
 
   var url = "https://api.planet.com/v0/scenes/ortho/";
   var key = 'd68202514a1c4a28adb429370e2017e6';
 
-  // [longitude, latitude]
-  // var sf_nw = [-122.545373, 37.815798];
   var sf_nw = Array(responseBox[0], responseBox[1])
-  // var sf_se = [-122.340066, 37.709403];
   var sf_se = Array(responseBox[2], responseBox[3])
   var sf_ne = [sf_se[0], sf_nw[1]];
   var sf_sw = [sf_nw[0], sf_se[1]];
   var bounds = [sf_nw, sf_ne, sf_se, sf_sw, sf_nw];
-
-  // // Using WKT
 
   var bounds_joined = [];
 
@@ -84,16 +72,19 @@ planetLabs = function(){
           "Authorization": auth
       },
       success: function(data) {
-          // do something with data.features here
           console.log(data.features)
-          ortho_id = (data.features[0].id)
-          console.log("ortho_id: " + ortho_id)
-          planetUrl = "https://api.planet.com/v0/scenes/ortho/"+ortho_id+"/square-thumb?size=lg"
-          loadNewSatImg = function(){
-            console.log("loadNewSatImg")
+          first_object = data.features[0]
+          if (first_object){
+            acquired = (new Date(first_object.properties.acquired)).toString()
+            $('.acquired').html("Photo Taken: " + acquired)
+            ortho_id = (first_object.id)
+            console.log("ortho_id: " + ortho_id)
+            planetUrl = "https://api.planet.com/v0/scenes/ortho/"+ortho_id+"/square-thumb?size=lg"
             $('.planetthumb').attr("src", planetUrl)
+          } else {
+            $('.acquired').html("No Dice on the Satellite, try somewhere in California.")
+            $('.planetthumb').attr("src", "no_dice.png")
           }
-          loadNewSatImg();
       },
   });
 }

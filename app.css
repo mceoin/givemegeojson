@@ -35,10 +35,23 @@ input.locinput:focus{
 }
 
 .locinput {
-  width: 200px;
+  width: 250px;
   height: 25px;
   font-size: 18px;
   font-family: 'Helvetica Neue';
   border: none;
   border-bottom: 1px solid;
+}
+
+.geojson{
+  width: 100%;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.datasrc{
+  position: absolute;
+  margin-left: 10px;
+  bottom: 0;
+  float: left;
 }

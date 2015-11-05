@@ -11,17 +11,32 @@
   </head>
   <body>
     <div class="headline">
-      <h2> Give me GeoJSON!</h2>
+      <h2 class="banner">Give me GeoJSON!</h2>
     </div>
     <div class="imgholder">
-      <img class="planetthumb" src="https://api.planet.com/v0/scenes/ortho/20150830_000654_0b07/square-thumb?size=lg">
+      <img class="planetthumb" src="https://api.planet.com/v0/scenes/ortho/20151011_235520_0b0e/square-thumb?size=lg">
+      <br />
+      <p class="acquired"></p>
     </div>
 
     <div class="formarea">
       <form name="locform" onsubmit="newLoc()">
-        <input class="locinput" type="text" name="locinput" placeholder="Enter Location">
+        <input class="locinput" type="text" name="locinput" placeholder="Enter Location in California">
       </form>
     </div>
+
+    <br />
+
+    <div class="geojson">
+      <p class="geojsonbox"></p>
+      <p class="geojsoncenter"></p>
+    </div>
+
+    <div class = "datasrc">
+      <p class="imgsrc">Satellite Image from <a href="https://www.planet.com/">Planet Labs API </a></p>
+      <p class="geojsonsrc">Location Data from <a href="https://www.mapbox.com/developers/api/">MapBox API</a></p>
+    </div>
+
     <script src="index.js"></script>
   </body>
 </html>
