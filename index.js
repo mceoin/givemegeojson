@@ -3,17 +3,20 @@
 loc = "oakland"
 placeholder = "Enter Location"
 
-newLoc = function(e){
-  console.log('debugging')
-  console.log(e)
-  debugger
-  e.preventDefault();
+function newLoc(){
+  console.log("newLoc firing")
+  event.preventDefault();
   loc = document.locform.locinput.value
+  getGeoJson();
 }
 
 mapboxKey = "pk.eyJ1IjoibWNlb2luIiwiYSI6ImNpZ2p0d29vcTAwODV1MWtyMjEyZGx1ejYifQ.e5vXnx4Hm0f0hbgUGFx78A"
 
 mapboxRequest = "https://api.mapbox.com/geocoding/v5/mapbox.places/"+loc+".json?access_token="+mapboxKey
+
+updateMapboxRequest = function(){
+  mapboxRequest = "https://api.mapbox.com/geocoding/v5/mapbox.places/"+loc+".json?access_token="+mapboxKey
+}
 
 console.log("mapboxRequest: " + mapboxRequest)
 
@@ -22,25 +25,30 @@ var responseObject = null;
 var responseBox = null;
 var responseName = null;
 
-$.ajax({
-  url: mapboxRequest,
-  // data: params,
-  // headers: {
-  //     "Authorization": auth
-  // },
-  success: function(data) {
-      // do something with data.features here
-      console.log("mapbox success")
-      console.log(data)
-      responseObject = data.features[0]
-      responseBox = responseObject.bbox // [-122.63405300977094, 37.81494699161172, -122.45728299009144, 37.88677500999976]
-      responseName = responseObject.place_name // "Sausalito, California, United States"
-      planetLabs();
-  },
+getGeoJson = function(){
+  updateMapboxRequest();
+  $.ajax({
+    url: mapboxRequest,
+    // data: params,
+    // headers: {
+    //     "Authorization": auth
+    // },
+    success: function(data) {
+        // do something with data.features here
+        console.log(data)
+        responseObject = data.features[0]
+        responseBox = responseObject.bbox
+        console.log("responseBox: "+responseBox)
+        responseName = responseObject.place_name
+        console.log("responseName: "+responseName)
+        planetLabs();
+    },
   });
+}
 
 /* PLANET LABS CODE */
 planetLabs = function(){
+
   var url = "https://api.planet.com/v0/scenes/ortho/";
   var key = 'd68202514a1c4a28adb429370e2017e6';
 
@@ -80,6 +88,12 @@ planetLabs = function(){
           console.log(data.features)
           ortho_id = (data.features[0].id)
           console.log("ortho_id: " + ortho_id)
+          planetUrl = "https://api.planet.com/v0/scenes/ortho/"+ortho_id+"/square-thumb?size=lg"
+          loadNewSatImg = function(){
+            console.log("loadNewSatImg")
+            $('.planetthumb').attr("src", planetUrl)
+          }
+          loadNewSatImg();
       },
   });
 }
