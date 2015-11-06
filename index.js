@@ -29,7 +29,7 @@ getGeoJson = function(){
         responseName = responseObject.place_name
         $('.geojsonbox').html("bbox: "+responseBox)
         $('.geojsoncenter').html("lat/long: " + responseLatLong)
-        $('.banner').html(responseName)
+        $('.locationname').html(responseName)
         planetLabs();
     },
   });
@@ -41,44 +41,47 @@ planetLabs = function(){
   var url = "https://api.planet.com/v0/scenes/ortho/";
   var key = 'd68202514a1c4a28adb429370e2017e6';
 
-  var sf_nw = Array(responseBox[0], responseBox[1])
-  var sf_se = Array(responseBox[2], responseBox[3])
-  var sf_ne = [sf_se[0], sf_nw[1]];
-  var sf_sw = [sf_nw[0], sf_se[1]];
-  var bounds = [sf_nw, sf_ne, sf_se, sf_sw, sf_nw];
+  if (responseBox){
+    var sf_nw = Array(responseBox[0], responseBox[1])
+    var sf_se = Array(responseBox[2], responseBox[3])
+    var sf_ne = [sf_se[0], sf_nw[1]];
+    var sf_sw = [sf_nw[0], sf_se[1]];
+    var bounds = [sf_nw, sf_ne, sf_se, sf_sw, sf_nw];
 
-  var bounds_joined = [];
+    var bounds_joined = [];
 
-  for (var i=0; i<bounds.length; i++) {
-      bounds_joined.push(bounds[i].join(' '));
-  }
+    for (var i=0; i<bounds.length; i++) {
+        bounds_joined.push(bounds[i].join(' '));
+    }
 
-  var intersects = "POLYGON((" + bounds_joined.join(', ') + "))";
+    var intersects = "POLYGON((" + bounds_joined.join(', ') + "))";
 
-  var params = {
-      intersects: intersects
-  };
+    var params = {
+        intersects: intersects
+    };
 
-  var auth = "Basic " + btoa(key + ":");
+    var auth = "Basic " + btoa(key + ":");
 
-  $.ajax({
-      url: url,
-      data: params,
-      headers: {
-          "Authorization": auth
-      },
-      success: function(data) {
-          first_object = data.features[0]
-          if (first_object){
+    $.ajax({
+        url: url,
+        data: params,
+        headers: {
+            "Authorization": auth
+        },
+        success: function(data) {
+            first_object = data.features[0]
             acquired = (new Date(first_object.properties.acquired)).toString()
-            $('.acquired').html("Photo Taken: " + acquired)
+            $('.acquired').html("Photo Taken: " + acquired).css('color', 'black');
             ortho_id = (first_object.id)
             planetUrl = "https://api.planet.com/v0/scenes/ortho/"+ortho_id+"/square-thumb?size=lg"
             $('.planetthumb').attr("src", planetUrl)
-          } else {
-            $('.acquired').html("No Dice on the Satellite, try somewhere in California.")
-            $('.planetthumb').attr("src", "no_dice.png")
-          }
-      },
-  });
+        },
+    });
+
+  } else {
+    $('.acquired').html("No Dice on the Satellite, try somewhere in California.").css('color', 'red');
+    $('.planetthumb').attr("src", "no_dice.png")
+  }
+
+
 }
