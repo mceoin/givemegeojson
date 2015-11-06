@@ -1,2 +1,1 @@
-Satelite Images from Planet Labs API
-GeoJSON data from MapBox API
+Playing around with the MapBox & PlanetLabs APIs
