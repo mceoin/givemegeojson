@@ -3,6 +3,11 @@
 loc = "oakland"
 placeholder = "Enter Location"
 
+nodice = function(){
+  $('.acquired').html("No Dice on the Satellite, try somewhere in California.").css('color', 'red');
+  $('.planetthumb').attr("src", "no_dice.png")
+}
+
 function newLoc(){
   event.preventDefault();
   loc = document.locform.locinput.value
@@ -24,13 +29,18 @@ getGeoJson = function(){
     url: mapboxRequest,
     success: function(data) {
         responseObject = data.features[0]
-        responseBox = responseObject.bbox
-        responseLatLong = responseObject.center
-        responseName = responseObject.place_name
-        $('.geojsonbox').html("bbox: "+responseBox)
-        $('.geojsoncenter').html("lat/long: " + responseLatLong)
-        $('.locationname').html(responseName)
-        planetLabs();
+        if (responseObject){
+          responseBox = responseObject.bbox
+          responseLatLong = responseObject.center
+          responseName = responseObject.place_name
+          $('.geojsonbox').html("bbox: "+responseBox)
+          $('.geojsoncenter').html("lat/long: " + responseLatLong)
+          $('.locationname').html(responseName)
+          planetLabs();
+        }
+        else {
+          nodice();
+        }
     },
   });
 }
@@ -79,8 +89,7 @@ planetLabs = function(){
     });
 
   } else {
-    $('.acquired').html("No Dice on the Satellite, try somewhere in California.").css('color', 'red');
-    $('.planetthumb').attr("src", "no_dice.png")
+    nodice();
   }
 
 
